@@ -3,10 +3,13 @@
 A segmentation model of detecting polyps in colonoscopy developed by Clara Train SDK v3.1.
 https://ngc.nvidia.com/catalog/containers/nvidia:clara-train-sdk </br>
 https://docs.nvidia.com/clara/tlt-mi/
+A brief introduction for this project:
+https://docs.google.com/presentation/d/16lPDuL_5Fk6vx14dmSBLxgIIIEO4zSMs5hLENdoX8TQ/edit?usp=sharing
 
 # Dataset
 ---
 The dataset we used is Kvasir-SEG. The Kvasir-SEG dataset (size 46.2 MB) contains 1000 polyp images and their corresponding ground truth from the Kvasir Dataset v2. The resolution of the images contained in Kvasir-SEG varies from 332x487 to 1920x1072 pixels.
+https://datasets.simula.no/kvasir-seg/
 
 <img src="./images/Kvasir-SEG.JPG" alt="drawing" width="300"/>
 
