@@ -18,7 +18,7 @@ Debesh Jha, Pia H. Smedsrud, Michael A. Riegler, Pål Halvorsen, Dag Johansen, T
 
 # Preparation
 ---
-To fit with TLT, we have to:
+For constructing the config of datalist easily, we can:
 - Prepare the folder structure as below,  
 
 <img src="./images/tlt_format.JPG" alt="drawing" width="200"/>
