@@ -1,0 +1,100 @@
+{
+  "use_scanning_window": true,
+  "batch_size": 1,
+  "inferer": {
+    "name": "TFScanWindowInferer",
+    "args": {
+      "roi_size": [384, 384],
+      "batch_size": 1
+    }
+  },
+  "model_loader": {
+    "name": "FrozenGraphModelLoader",
+    "args": {
+      "model_file_path": "{MMAR_CKPT_DIR}/model.trt.pb"
+    }
+  },
+  "multi_gpu": false,
+  "pre_transforms": [
+    {
+        "name": "LoadPng",
+        "args": {
+          "fields": [
+            "image"
+          ]
+        }
+      },
+      {
+        "name": "ConvertToChannelsLast",
+        "args": {
+          "fields": [
+            "image"
+          ]
+        }
+      },
+      {
+        "name": "ScaleIntensityRange",
+        "args": {
+          "fields": "image",
+          "a_min": 0,
+          "a_max": 255,
+          "b_min": 0.0,
+          "b_max": 1.0,
+          "clip": true
+        }
+      },
+      {
+        "name": "NormalizeNonzeroIntensities",
+        "args": {
+          "fields": "image"
+        }
+      }
+  ],
+  "post_transforms": [
+      {
+          "name": "ThresholdValues",
+          "args": {
+              "fields": "model",
+              "threshold": 0.5
+          }
+      }
+  ],
+  "label_transforms": [
+    {
+      "name": "LoadPng",
+      "args": {
+        "fields": "label"
+      }
+    },
+    {
+      "name": "ConvertToChannelsLast",
+      "args": {
+        "fields": [
+          "label"
+        ]
+      }
+    }
+  ],
+  "val_metrics": [
+    {
+      "name": "ComputeAverageDice",
+      "args": {
+        "name": "mean_dice",
+        "field": "model",
+        "label_field": "label",
+        "report_path": "{MMAR_EVAL_OUTPUT_PATH}",
+        "is_2d": true
+      }
+    }
+  ],
+  "writers": [
+    {
+      "name": "WriteNifti",
+      "args": {
+        "field": "model",
+        "dtype": "uint8",
+        "write_path": "{MMAR_EVAL_OUTPUT_PATH}"
+      }
+    }
+  ]
+}
