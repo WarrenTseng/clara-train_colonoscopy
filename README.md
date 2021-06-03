@@ -1,7 +1,8 @@
 # clara-train_colonoscopy
 ---
 A segmentation model of detecting polyps in colonoscopy developed by Clara Train SDK v3.1.
-https://ngc.nvidia.com/catalog/containers/nvidia:clara-train-sdk
+https://ngc.nvidia.com/catalog/containers/nvidia:clara-train-sdk </br>
+
 https://docs.nvidia.com/clara/tlt-mi/
 
 # Dataset
