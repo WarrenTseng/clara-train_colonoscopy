@@ -1,0 +1,102 @@
+{
+  "version": "3",
+  "type": "segmentation",
+  "labels": [
+    "polyp"
+  ],
+  "description": "A pre-trained model for 2D segmentation of the colonoscopy from image",
+  "pre_transforms": [
+    {
+        "name": "LoadPng",
+        "args": {
+          "fields": [
+            "image"
+          ]
+        }
+      },
+      {
+        "name": "ConvertToChannelsLast",
+        "args": {
+          "fields": [
+            "image"
+          ]
+        }
+      },
+      {
+        "name": "ScaleIntensityRange",
+        "args": {
+          "fields": "image",
+          "a_min": 0,
+          "a_max": 255,
+          "b_min": 0.0,
+          "b_max": 1.0,
+          "clip": true
+        }
+      },
+      {
+        "name": "NormalizeNonzeroIntensities",
+        "args": {
+          "fields": "image"
+        }
+      }
+  ],
+  "inference": {
+    "image": "image",
+    "name": "TRTISInference",
+    "args": {
+        "scanning_window": true,
+        "batch_size": 1,
+        "roi": [
+          384,
+          384
+        ]
+    },
+    "tf": {
+      "input_nodes": {
+        "image": "NV_MODEL_INPUT"
+      },
+      "output_nodes": {
+        "model": "NV_MODEL_OUTPUT"
+      }
+    },
+    "trtis": {
+      "platform": "tensorflow_graphdef",
+      "max_batch_size": 1,
+      "input": [
+        {
+          "name": "NV_MODEL_INPUT",
+          "data_type": "TYPE_FP32",
+          "dims": [384, 384, 3]
+        }
+      ],
+      "output": [
+        {
+          "name": "NV_MODEL_OUTPUT",
+          "data_type": "TYPE_FP32",
+          "dims": [384, 384, 1]
+        }
+      ],
+      "instance_group": [
+        {
+          "count": 1,
+          "kind": "KIND_AUTO"
+        }
+      ]
+    }
+  },
+  "post_transforms": [
+      {
+          "name": "ThresholdValues",
+          "args": {
+              "fields": "model",
+              "threshold": 0.5
+          }
+      }
+  ],
+  "writer": {
+    "name": "WritePng",
+    "args": {
+      "field": "model"
+    }
+  }
+}
